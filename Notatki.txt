@@ -1,0 +1,2 @@
+w StudentModel
+parentid, pesel, AddressId

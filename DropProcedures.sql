@@ -1,0 +1,6 @@
+DROP PROCEDURE [User].[UserGet]
+DROP PROCEDURE [User].[CheckLoginDetails]
+DROP PROCEDURE [User].[PermisionsOfUserGet]
+DROP PROCEDURE [User].[LastSuccessfulLoginSet]
+--DROP PROCEDURE [User].[MainRolesOfUserGet]
+DROP PROCEDURE [User].[UserDetailsGet]
