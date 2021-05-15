@@ -12,7 +12,6 @@
     DROP TABLE [School].[StudentsComments]
     DROP TABLE [School].[Frequency]
     DROP TABLE [School].[PresentTypes]
-    DROP TABLE [School].[ClassLessons]
     DROP TABLE [School].[StudentGrades]
     DROP TABLE [School].[Grades]
     DROP TABLE [School].[GradeStyles]

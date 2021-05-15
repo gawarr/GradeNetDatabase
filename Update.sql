@@ -95,8 +95,8 @@ CREATE TABLE [School].[Classes](
 	[StartYear] INT NOT NULL
 )
 CREATE TABLE [School].[ClassStudents](
-	ClassStudentId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	StudentId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	StudentId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	UserId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	ClassId INT NOT NULL FOREIGN KEY REFERENCES [School].[Classes](ClassId)
 )
 CREATE TABLE [School].[LessonTypes](
@@ -106,6 +106,7 @@ CREATE TABLE [School].[LessonTypes](
 )
 CREATE TABLE [School].[Lessons](
 	LessonId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	ClassId INT NOT NULL FOREIGN KEY REFERENCES [School].[Classes](ClassId),
 	LessonTypeId INT NOT NULL FOREIGN KEY REFERENCES [School].[LessonTypes](LessonTypeId),
 	TeacherId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId)
 )
@@ -121,7 +122,7 @@ CREATE TABLE [School].[Grades](
 )	
 CREATE TABLE [School].[StudentGrades](
 	StudentGradeId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
+	StudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](StudentId),
 	GradeId INT NOT NULL FOREIGN KEY REFERENCES [School].[Grades](GradeId),
 	LessonId INT NOT NULL FOREIGN KEY REFERENCES [School].[Lessons](LessonId),
 	CreationTime DATETIME NOT NULL,
@@ -129,11 +130,6 @@ CREATE TABLE [School].[StudentGrades](
 	UserModificatedId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	IsEnabled BIT NOT NULL
 )
-CREATE TABLE [School].[ClassLessons](
-	ClassLessonId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	ClassId INT NOT NULL FOREIGN KEY REFERENCES [School].[Classes](ClassId),
-	LessonId INT NOT NULL FOREIGN KEY REFERENCES [School].[Lessons](LessonId)
-)	
 CREATE TABLE [School].[PresentTypes](
 	PresentTypeId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Name] VARCHAR(30) UNIQUE NOT NULL,
@@ -143,12 +139,12 @@ CREATE TABLE [School].[Frequency](
 	FrequencyId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Date] DATE NOT NULL,
 	LessonNumber TINYINT NOT NULL,
-	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
+	StudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](StudentId),
 	PresentTypeId INT NOT NULL FOREIGN KEY REFERENCES [School].[PresentTypes](PresentTypeId)
 )
 CREATE TABLE [School].[StudentsComments](
 	CommentId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
+	StudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](StudentId),
 	TeacherId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	Content VARCHAR(250) NOT NULL,
 	CreationTime DATETIME NOT NULL,
