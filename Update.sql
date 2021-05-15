@@ -51,6 +51,7 @@ CREATE TABLE [User].[UserDetails](
 	CreationTime DATETIME NOT NULL,
 	ModificationTime DATETIME NOT NULL,
 	UserModificatedId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	IsConfirmed BIT NOT NULL,
 	IsEnabled BIT NOT NULL
 )
 CREATE TABLE [User].[Permissions](
@@ -120,7 +121,7 @@ CREATE TABLE [School].[Grades](
 )	
 CREATE TABLE [School].[StudentGrades](
 	StudentGradeId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	StudentId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
 	GradeId INT NOT NULL FOREIGN KEY REFERENCES [School].[Grades](GradeId),
 	LessonId INT NOT NULL FOREIGN KEY REFERENCES [School].[Lessons](LessonId),
 	CreationTime DATETIME NOT NULL,
@@ -142,12 +143,12 @@ CREATE TABLE [School].[Frequency](
 	FrequencyId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[Date] DATE NOT NULL,
 	LessonNumber TINYINT NOT NULL,
-	StudentId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
 	PresentTypeId INT NOT NULL FOREIGN KEY REFERENCES [School].[PresentTypes](PresentTypeId)
 )
 CREATE TABLE [School].[StudentsComments](
 	CommentId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	StudentId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	ClassStudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](ClassStudentId),
 	TeacherId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	Content VARCHAR(250) NOT NULL,
 	CreationTime DATETIME NOT NULL,

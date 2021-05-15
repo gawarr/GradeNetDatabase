@@ -80,28 +80,6 @@ BEGIN
 END
 GO
 
---  -- =============================================
---  -- Author:		Paweł Gawarecki
---  -- Create date: 23.04.2021
---  -- Description:	Procedura pobiera główne role użytkownika
---  -- =============================================
---  CREATE PROCEDURE [User].[MainRolesOfUserGet]
---  	@Email VARCHAR(50)
---  AS
---  BEGIN
---  	SELECT 
---  		 r.Name
---  	FROM [User].[Roles] r
---  	JOIN [User].[UserRoles] ur
---  	ON ur.RoleId = r.RoleId				AND ur.IsEnabled = 1
---  	JOIN [User].[Users] u
---  	ON u.UserId = ur.UserId				AND u.IsEnabled = 1
---  	WHERE
---  		u.Email = @Email				AND r.IsEnabled = 1
---  	AND r.Name IN ('student', 'parent', 'teacher')
---  END
---  GO
-
 -- =============================================
 -- Author:		Paweł Gawarecki
 -- Create date: 23.04.2021
@@ -130,5 +108,5 @@ BEGIN
 	ON ud.UserId = u.UserId
 	JOIN [User].[Addresses] a
 	ON a.AddressId = ud.AddressId
+	WHERE u.Email = @Email
 END
-GO

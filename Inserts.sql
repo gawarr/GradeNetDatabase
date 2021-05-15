@@ -1,18 +1,12 @@
 INSERT INTO [User].[Users] (
 	 Email
 	,Password
-	,CreationTime
-	,ModificationTime
-	,UserModificated
 	,LastSuccessfulLogin
 	,IsEnabled
 	)
 VALUES (
 	 'admin@admin.pl'
 	,CONVERT(VARCHAR(32), HashBytes('MD5', 'admin'), 2)
-	,GETDATE()
-	,GETDATE()
-	,1
 	,NULL
 	,1
 )
@@ -29,17 +23,17 @@ VALUES (
 ),
 (
 	 'teacher'
-	,'Rola nauczyciela'
+	,'Uprawnienie nauczyciela'
 	,1
 ),
 (
 	 'parent'
-	,'Rola opiekuna'
+	,'Uprawnienie opiekuna'
 	,1
 ),
 (
 	 'student'
-	,'Rola studenta'
+	,'Uprawnienie studenta'
 	,1
 )
 
@@ -74,7 +68,7 @@ INSERT INTO [User].[RolePermissions] (
 	,PermissionId
 	,CreationTime
 	,ModificationTime
-	,UserModificated
+	,UserModificatedid
 	,IsEnabled
 )
 VALUES (
@@ -115,7 +109,7 @@ INSERT INTO [User].[UserRoles] (
 	,RoleId
 	,CreationTime
 	,ModificationTime
-	,UserModificated
+	,UserModificatedId
 	,IsEnabled
 )
 VALUES (
@@ -131,29 +125,6 @@ VALUES (
 	,2
 	,GETDATE()
 	,GETDATE()
-	,1
-	,1
-)
-
-INSERT INTO [User].[UserDetails](
-	 UserId
-	,FirstName
-	,SecondName
-	,Surname
-	,ContactNumber
-	,PESEL
-	,ParentId
-	,AddressId
-	,IsConfirmed
-)
-VALUES(
-	 1
-	,'Imię'
-	,'DrugieImię'
-	,'Nazwisko'
-	,'111111111'
-	,'12121212121'
-	,NULL
 	,1
 	,1
 )
@@ -175,4 +146,35 @@ VALUES(
 	,'23'
 	,'11-111'
 	,'testowa'
+)
+
+INSERT INTO [User].[UserDetails](
+	 UserId
+	,FirstName
+	,SecondName
+	,Surname
+	,PESEL
+	,ContactNumber
+	,AddressId
+	,ParentId
+	,CreationTime
+	,ModificationTime
+	,UserModificatedId
+	,IsConfirmed
+	,IsEnabled
+)
+VALUES(
+	 1
+	,'Imię'
+	,'DrugieImię'
+	,'Nazwisko'
+	,'11111111111'
+	,'123123123'
+	,1
+	,null
+	,GETDATE()
+	,GETDATE()
+	,1
+	,1
+	,1
 )
