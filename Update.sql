@@ -44,7 +44,7 @@ CREATE TABLE [User].[UserDetails](
     FirstName VARCHAR(30) NOT NULL,
 	SecondName VARCHAR(30),
 	Surname VARCHAR(60) NOT NULL,
-	PESEL VARCHAR(11) UNIQUE,
+	PESEL VARCHAR(11),
     ContactNumber VARCHAR(15) NOT NULL,
 	AddressId INT FOREIGN KEY REFERENCES [User].[Addresses](AddressId),
 	ParentId INT FOREIGN KEY REFERENCES [User].[Users](UserId),
