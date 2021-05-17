@@ -8,6 +8,7 @@
     ------------------------------------
 
     DROP TABLE [School].[Events]
+    DROP TABLE [School].[EventTypes]
     DROP TABLE [School].[Subjects]
     DROP TABLE [School].[StudentsComments]
     DROP TABLE [School].[Frequency]
