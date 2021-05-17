@@ -137,10 +137,15 @@ CREATE TABLE [School].[PresentTypes](
 )
 CREATE TABLE [School].[Frequency](
 	FrequencyId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[Date] DATE NOT NULL,
+	LessonId INT NOT NULL FOREIGN KEY REFERENCES [School].[Lessons](LessonId),
 	LessonNumber TINYINT NOT NULL,
+	[Date] DATE NOT NULL,
 	StudentId INT NOT NULL FOREIGN KEY REFERENCES [School].[ClassStudents](StudentId),
-	PresentTypeId INT NOT NULL FOREIGN KEY REFERENCES [School].[PresentTypes](PresentTypeId)
+	PresentTypeId INT NOT NULL FOREIGN KEY REFERENCES [School].[PresentTypes](PresentTypeId),
+	CreationTime DATETIME NOT NULL,
+	ModificationTime DATETIME NOT NULL,
+	UserModificatedId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
+	IsEnabled BIT NOT NULL
 )
 CREATE TABLE [School].[StudentsComments](
 	CommentId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -154,14 +159,22 @@ CREATE TABLE [School].[StudentsComments](
 )
 CREATE TABLE [School].[Subjects](
 	SubjectId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[Subject] VARCHAR(50) NOT NULL,
 	LessonId INT NOT NULL FOREIGN KEY REFERENCES [School].[Lessons](LessonId),
+	SubjectDate DATE NOT NULL,
 	CreationTime DATETIME NOT NULL,
 	ModificationTime DATETIME NOT NULL,
 	UserModificatedId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	IsEnabled BIT NOT NULL
 )
+CREATE TABLE [School].[EventTypes](
+	EventTypeId TINYINT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[EventType] VARCHAR(20) NOT NULL,
+	IsEnabled BIT NOT NULL
+)
 CREATE TABLE [School].[Events](
 	EventId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	EventTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES [School].[EventTypes](EventTypeId),
 	EventDate DATETIME NOT NULL,
 	[Description] VARCHAR(100) NOT NULL,
 	TeacherId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
