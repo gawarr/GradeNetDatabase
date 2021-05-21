@@ -11,8 +11,7 @@ BEGIN
 		 UserId
 		,Password
         ,Email
-	FROM 
-		[User].[Users]
+	FROM [User].[Users]
 	WHERE
 		UserId = @UserId
 END
@@ -53,15 +52,15 @@ BEGIN
 		 p.Name
 	FROM [User].[Permissions] p 
 	JOIN [User].[RolePermissions] rp
-	ON rp.PermissionId = p.PermissionId AND rp.IsEnabled = 1
+		ON rp.PermissionId = p.PermissionId AND rp.IsEnabled = 1
 	JOIN [User].[Roles] r
-	ON r.RoleId = rp.RoleId				AND r.IsEnabled = 1
+		ON r.RoleId = rp.RoleId				AND r.IsEnabled = 1
 	JOIN [User].[UserRoles] ur
-	ON ur.RoleId = r.RoleId				AND ur.IsEnabled = 1
+		ON ur.RoleId = r.RoleId				AND ur.IsEnabled = 1
 	JOIN [User].[Users] u
-	ON u.UserId = ur.UserId				AND u.IsEnabled = 1
+		ON u.UserId = ur.UserId				AND u.IsEnabled = 1
 	WHERE
-		u.Email = @Email				AND p.IsEnabled = 1
+		u.Email = @Email					AND p.IsEnabled = 1
 END
 GO
 
@@ -105,8 +104,207 @@ BEGIN
 		,a.PostOfficePlace
 	FROM [User].[Users] u
 	JOIN [User].[UserDetails] ud
-	ON ud.UserId = u.UserId
+		ON ud.UserId = u.UserId
 	JOIN [User].[Addresses] a
-	ON a.AddressId = ud.AddressId
-	WHERE u.Email = @Email
+		ON a.AddressId = ud.AddressId
+	WHERE 
+		u.Email = @Email
 END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera klasy z danego rocznika
+-- =============================================
+CREATE PROCEDURE [School].[ClassesGet_ForYear]
+	@Year INT
+AS
+BEGIN
+	SELECT
+		 ClassId 
+		,Name
+	FROM [School].[Classes]
+	WHERE
+		StartYear = @Year
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera zdarzenia dla klasy
+-- =============================================
+CREATE PROCEDURE [School].[EventsGet_ForClass]
+	@ClassId INT
+AS
+BEGIN
+	SELECT
+		 EventId
+		,EventType
+		,EventDate
+		,Description
+	FROM [School].[Events] E
+	JOIN [School].[EventTypes] ET
+		ON ET.EventTypeId = E.EventTypeId
+	WHERE
+		E.ClassId = @ClassId
+	AND E.IsEnabled = 1
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera lekcje danej klasy
+-- =============================================
+CREATE PROCEDURE [School].[LessonsGet_ForClass]
+	@ClassId INT
+AS
+BEGIN
+	SELECT
+		 L.LessonId 
+		,LT.Name
+	FROM [School].[Lessons] L
+	JOIN [School].[LessonTypes] LT
+		ON LT.LessonTypeId = L.LessonTypeId
+	WHERE
+		ClassId = @ClassId
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera tematy dla danej lekcji
+-- =============================================
+CREATE PROCEDURE [School].[SubjectsGet]
+	@LessonId INT
+AS
+BEGIN
+	SELECT
+		 SubjectId
+		,Subject
+		,SubjectDate
+	FROM [School].[Subjects]
+	WHERE
+		LessonId = @LessonId
+	AND IsEnabled = 1
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera uczniów klasy
+-- =============================================
+CREATE PROCEDURE [School].[StudentsGet]
+	@ClassId INT
+AS
+BEGIN
+	SELECT
+		 S.StudentId
+		,UD.FirstName
+		,UD.SecondName
+		,UD.Surname
+	FROM [School].[Students] S
+	JOIN [User].[UserDetails] UD 
+		ON UD.UserId = S.UserId AND UD.IsEnabled = 1
+	WHERE
+		E.ClassId = @ClassId
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera frekfencję danego ucznia z wybranej lekcji
+-- =============================================
+CREATE PROCEDURE [School].[FrequencyGet_ForStudent]
+	@StudentId INT,
+	@LessonId INT
+AS
+BEGIN
+	SELECT
+		 F.FrequencyId
+		,F.Date
+		,PT.Name
+		,PT.Shortcut
+	FROM [School].[Frequency] F
+	JOIN [School].[PresentTypes] PT 
+		ON PT.PresentTypeId = PT.PresentTypeId
+	WHERE
+		F.StudentId = @StudentId
+	AND F.IsEnabled = 1
+	AND LessonId = @LessonId
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera uwagi podanego ucznia
+-- =============================================
+CREATE PROCEDURE [School].[StudentsCommentsGet]
+	@StudentId INT
+AS
+BEGIN
+	SELECT
+		 SC.CommentId
+		,SC.Content
+		,SD.FirstName AS StudentFirstName
+		,SD.SecondName AS StudentSecondName
+		,SD.Surname AS StudentSurname
+		,TD.FirstName AS TeacherFirstName
+		,TD.SecondName AS TeacherSecondName
+		,TD.Surname AS TeacherSurname
+	FROM [School].[StudentsComments] SC
+	JOIN [School].[ClassStudents] CS
+		ON CS.StudentId = SC.StudentId
+	JOIN [User].[UserDetails] SD
+		ON SD.UserId = CS.UserId
+	JOIN [User].[UserDetails] TD
+		ON TD.UserId = SC.TeacherId
+	WHERE
+		SC.StudentId = @StudentId
+	AND SC.IsEnabled = 1
+	AND SD.IsEnabled = 1
+	AND TD.IsEnabled = 1
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera oceny podanego ucznia z wybranej lekcji
+-- =============================================
+CREATE PROCEDURE [School].[StudentGradesGet]
+	@StudentId INT,
+	@LessonId INT
+AS
+BEGIN
+	SELECT
+		 SG.StudentGradeId
+		,G.Grade
+		,GS.Style
+		,UD.FirstName AS StudentFirstName
+		,UD.SecondName AS StudentSecondName
+		,UD.Surname AS StudentSurname
+	FROM [School].[StudentGrades] SG
+	JOIN [School].[Grades] G
+		ON G.GradeId = SG.GradeId
+	JOIN [School].[GradeStyles] GS
+		ON GS.GradeStyleId = G.GradeStyleId
+	JOIN [School].[ClassStudents] CS
+		ON CS.StudentId = SG.StudentId
+	JOIN [User].[UserDetails] UD
+		ON UD.UserId = CS.UserId
+	WHERE
+		SG.StudentId = @StudentId
+	AND SG.IsEnabled = 1
+	AND SG.LessonId = @LessonId
+	AND TD.IsEnabled = 1
+END
+GO
+
+
