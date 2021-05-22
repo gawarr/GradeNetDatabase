@@ -170,12 +170,13 @@ CREATE TABLE [School].[Subjects](
 CREATE TABLE [School].[EventTypes](
 	EventTypeId TINYINT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[EventType] VARCHAR(20) NOT NULL,
+	Shortcut VARCHAR(5) NOT NULL,
 	IsEnabled BIT NOT NULL
 )
 CREATE TABLE [School].[Events](
 	EventId BIGINT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	EventTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES [School].[EventTypes](EventTypeId),
-	EventDate DATETIME NOT NULL,
+	EventDate DATE NOT NULL,
 	[Description] VARCHAR(100) NOT NULL,
 	TeacherId INT NOT NULL FOREIGN KEY REFERENCES [User].[Users](UserId),
 	ClassId INT NOT NULL FOREIGN KEY REFERENCES [School].[Classes](ClassId),

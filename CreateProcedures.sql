@@ -142,6 +142,7 @@ BEGIN
 	SELECT
 		 EventId
 		,EventType
+		,Shortcut
 		,EventDate
 		,Description
 	FROM [School].[Events] E
@@ -232,7 +233,7 @@ BEGIN
 		,PT.Shortcut
 	FROM [School].[Frequency] F
 	JOIN [School].[PresentTypes] PT 
-		ON PT.PresentTypeId = PT.PresentTypeId
+		ON PT.PresentTypeId = F.PresentTypeId
 	WHERE
 		F.StudentId = @StudentId
 	AND F.IsEnabled = 1
@@ -303,8 +304,6 @@ BEGIN
 		SG.StudentId = @StudentId
 	AND SG.IsEnabled = 1
 	AND SG.LessonId = @LessonId
-	AND TD.IsEnabled = 1
+	AND UD.IsEnabled = 1
 END
 GO
-
-

@@ -114,11 +114,11 @@ VALUES
 ,(1  	  , 2  		    , GETDATE()   ,1  		 , 2  		  	, GETDATE(), GETDATE(), 1 , 1)
 
 INSERT INTO [School].[EventTypes]
- (EventType   , IsEnabled)
+ (EventType   , Shortcut, IsEnabled)
 VALUES
- ('Sprawdzian', 1)
-,('Kartkówka' , 1)
-,('Wycieczka' , 1)
+ ('Sprawdzian', 'S'      ,1)
+,('Kartkówka' , 'K'      ,1)
+,('Wycieczka' , 'W'      ,1)
 
 INSERT INTO [School].[Events]
  (EventTypeId, EventDate   , Description				, TeacherId, ClassId, CreationTime, ModificationTime, UserModificatedId, IsEnabled)
