@@ -49,7 +49,7 @@ VALUES
 INSERT INTO [User].[UserDetails]
  (UserId, FirstName, SecondName   , Surname    , PESEL		  , ContactNumber, AddressId, ParentId, CreationTime, ModificationTime, UserModificatedId, IsConfirmed, IsEnabled)
 VALUES
- (1		, 'Imię'   , 'DrugieImię' , 'Nazwisko' , '11111111111', '123123123'  , 1		, null	  , GETDATE(), GETDATE(), 1, 1, 1)   
+ (1		, 'Imię'   , 'DrugieImię' , 'Nazwisko' , '11111111111', '123123123'  , 1		, null	  , GETDATE(), GETDATE(), 1, 1, 1) 
 ,(2		, 'Paweł'  , null	  	  , 'Oski'	   , null		  , '515515515'  , 2		, null	  , GETDATE(), GETDATE(), 1, 1, 1)   
 ,(3		, 'Piotr'  , 'Janusz'	  , 'Łęcki'    , null		  , '888888888'  , 3		, null	  , GETDATE(), GETDATE(), 1, 1, 1)   
 ,(4		, 'Marcin' , null	  	  , 'Łęcki'    , '12345678902', '456456456'  , 3		, 3	  	  , GETDATE(), GETDATE(), 1, 1, 1)

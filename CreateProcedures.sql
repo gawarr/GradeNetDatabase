@@ -115,6 +115,21 @@ GO
 -- =============================================
 -- Author:		Paweł Gawarecki
 -- Create date: 22.05.2021
+-- Description:	Procedura pobiera dostępne roczniki
+-- =============================================
+CREATE PROCEDURE [School].[YearsGet]
+AS
+BEGIN
+	SELECT DISTINCT 
+		StartYear
+	FROM [School].[Classes]
+	ORDER BY 1 DESC
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
 -- Description:	Procedura pobiera klasy z danego rocznika
 -- =============================================
 CREATE PROCEDURE [School].[ClassesGet_ForYear]
@@ -208,13 +223,12 @@ BEGIN
 		,UD.FirstName
 		,UD.SecondName
 		,UD.Surname
-	FROM [School].[Students] S
+	FROM [School].[ClassStudents] S
 	JOIN [User].[UserDetails] UD 
 		ON UD.UserId = S.UserId AND UD.IsEnabled = 1
 	WHERE
-		E.ClassId = @ClassId
+		S.ClassId = @ClassId
 END
-GO
 
 -- =============================================
 -- Author:		Paweł Gawarecki
@@ -279,7 +293,7 @@ GO
 -- Create date: 22.05.2021
 -- Description:	Procedura pobiera oceny podanego ucznia z wybranej lekcji
 -- =============================================
-CREATE PROCEDURE [School].[StudentGradesGet]
+CREATE PROCEDURE [School].[StudentGradesGet_ForStudent]
 	@StudentId INT,
 	@LessonId INT
 AS
@@ -288,22 +302,38 @@ BEGIN
 		 SG.StudentGradeId
 		,G.Grade
 		,GS.Style
-		,UD.FirstName AS StudentFirstName
-		,UD.SecondName AS StudentSecondName
-		,UD.Surname AS StudentSurname
 	FROM [School].[StudentGrades] SG
 	JOIN [School].[Grades] G
 		ON G.GradeId = SG.GradeId
 	JOIN [School].[GradeStyles] GS
 		ON GS.GradeStyleId = G.GradeStyleId
-	JOIN [School].[ClassStudents] CS
-		ON CS.StudentId = SG.StudentId
-	JOIN [User].[UserDetails] UD
-		ON UD.UserId = CS.UserId
 	WHERE
 		SG.StudentId = @StudentId
 	AND SG.IsEnabled = 1
 	AND SG.LessonId = @LessonId
-	AND UD.IsEnabled = 1
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera ocen dla klasy z wybranej lekcji
+-- =============================================
+CREATE PROCEDURE [School].[StudentGradesGet_ForLesson]
+	@LessonId INT
+AS
+BEGIN
+	SELECT
+		 SG.StudentGradeId
+		,G.Grade
+		,GS.Style
+	FROM [School].[StudentGrades] SG
+	JOIN [School].[Grades] G
+		ON G.GradeId = SG.GradeId
+	JOIN [School].[GradeStyles] GS
+		ON GS.GradeStyleId = G.GradeStyleId
+	WHERE
+		SG.IsEnabled = 1
+	AND SG.LessonId = @LessonId
 END
 GO
