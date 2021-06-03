@@ -230,6 +230,7 @@ BEGIN
 		S.ClassId = @ClassId
 	ORDER BY 4, 2, 3 ASC
 END
+GO
 
 -- =============================================
 -- Author:		Paweł Gawarecki
