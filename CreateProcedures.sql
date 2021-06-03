@@ -228,6 +228,7 @@ BEGIN
 		ON UD.UserId = S.UserId AND UD.IsEnabled = 1
 	WHERE
 		S.ClassId = @ClassId
+	ORDER BY 4, 2, 3 ASC
 END
 
 -- =============================================
@@ -327,6 +328,7 @@ BEGIN
 		 SG.StudentGradeId
 		,G.Grade
 		,GS.Style
+		,SG.StudentId
 	FROM [School].[StudentGrades] SG
 	JOIN [School].[Grades] G
 		ON G.GradeId = SG.GradeId
