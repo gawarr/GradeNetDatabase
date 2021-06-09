@@ -118,6 +118,7 @@ CREATE TABLE [School].[GradeStyles](
 CREATE TABLE [School].[Grades](
 	GradeId INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	Grade VARCHAR(3) NOT NULL,
+	Semester BIT NOT NULL,
 	GradeStyleId TINYINT NOT NULL FOREIGN KEY REFERENCES [School].[GradeStyles](GradeStyleId)
 )	
 CREATE TABLE [School].[StudentGrades](

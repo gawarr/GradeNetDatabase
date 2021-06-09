@@ -148,6 +148,30 @@ GO
 -- =============================================
 -- Author:		Paweł Gawarecki
 -- Create date: 22.05.2021
+-- Description:	Procedura pobiera dane o klasie
+-- =============================================
+CREATE PROCEDURE [School].[ClassGet]
+	@ClassId INT
+AS
+BEGIN
+	SELECT
+		 ClassId 
+		,Name
+		,MainTeacherId
+		,FirstName
+		,SecondName
+		,Surname
+	FROM [School].[Classes] Cl
+	JOIN [User].[UserDetails] UD
+		ON UD.UserId = Cl.MainTeacherId
+	WHERE
+		ClassId = @ClassId
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
 -- Description:	Procedura pobiera zdarzenia dla klasy
 -- =============================================
 CREATE PROCEDURE [School].[EventsGet_ForClass]
@@ -186,6 +210,36 @@ BEGIN
 		ON LT.LessonTypeId = L.LessonTypeId
 	WHERE
 		ClassId = @ClassId
+END
+GO
+
+-- =============================================
+-- Author:		Paweł Gawarecki
+-- Create date: 22.05.2021
+-- Description:	Procedura pobiera lekcje danej klasy
+-- =============================================
+CREATE PROCEDURE [School].[LessonGet]
+	@LessonId INT
+AS
+BEGIN
+	SELECT
+		 L.LessonId 
+		,LT.Name AS LessonName
+		,C.ClassId
+		,C.Name AS ClassName
+		,TeacherId
+		,FirstName
+		,SecondName
+		,Surname
+	FROM [School].[Lessons] L
+	JOIN [School].[LessonTypes] LT
+		ON LT.LessonTypeId = L.LessonTypeId
+	JOIN [User].[UserDetails] UD
+		ON UD.UserId = L.TeacherId
+	JOIN [School].[Classes] C
+		ON C.ClassId = L.ClassId
+	WHERE
+		LessonId = @LessonId
 END
 GO
 
@@ -275,6 +329,7 @@ BEGIN
 		,TD.FirstName AS TeacherFirstName
 		,TD.SecondName AS TeacherSecondName
 		,TD.Surname AS TeacherSurname
+		,SD.CreationTime
 	FROM [School].[StudentsComments] SC
 	JOIN [School].[ClassStudents] CS
 		ON CS.StudentId = SC.StudentId
@@ -330,6 +385,7 @@ BEGIN
 		,G.Grade
 		,GS.Style
 		,SG.StudentId
+		,G.Semester
 	FROM [School].[StudentGrades] SG
 	JOIN [School].[Grades] G
 		ON G.GradeId = SG.GradeId
