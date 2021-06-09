@@ -189,6 +189,8 @@ BEGIN
 		ON ET.EventTypeId = E.EventTypeId
 	WHERE
 		E.ClassId = @ClassId
+	AND MONTH(EventDate) = MONTH(GETDATE())
+	AND YEAR(EventDate) = YEAR(GETDATE())
 	AND E.IsEnabled = 1
 END
 GO
